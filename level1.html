@@ -6,13 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="style/style.css" rel="stylesheet">    
     <link href="style/level1.css" rel="stylesheet">    
+    <script src="js/typed.js"></script>
     <script defer src="js/level1.js"></script>
     <title>Fighting AI - Level One</title>
 </head>
-<body>
+<body onload="runTyping('Immer einmal mehr wie du...');">
+
+   <div id="hidden">
+        <p id="typingText"> </p>                                
+   </div>
+   
+
     <div class="container">
         <div id="output" class="outputContainer">
-            <h2 id="outputText">Immer einmal mehr wie du...</h2>
+            <h2 id="outputText"><span id="typed"></span></h2>
         </div>
         <div id="input" class="inputContainer">
             <input type="text" name="inputText" class="inputText" value="bla" id="inputText"/>

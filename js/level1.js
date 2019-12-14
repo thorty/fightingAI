@@ -1,25 +1,27 @@
-const outputTextElement = document.getElementById('outputText');
+const outputTextElement = document.getElementById('typingText');
 const inputTextElement = document.getElementById('inputText');
 
+var typed;
 
 
 
 
 function textinput(){
+    let output="";
     if (isInputSolution(inputTextElement.value)){
-        outputTextElement.innerText = '__'
+        output = ')?!-#~+<$()&?=('
     } else { 
         if (inputTextElement.value === ""){
-            outputTextElement.innerText = 'Du kannst micht nicht besiegen!'
+            output = 'Du kannst micht nicht besiegen!'
         }        
         else if (outputTextElement.innerText === inputTextElement.value){
-            outputTextElement.innerText = outputTextElement.innerText +inputTextElement.value    
+            output = outputTextElement.innerText +inputTextElement.value    
         } else {
-            outputTextElement.innerText = inputTextElement.value +' '+inputTextElement.value    
+            output = inputTextElement.value +' '+inputTextElement.value    
         }
-        inputTextElement.value ='';
-        //Todo What todo when empty
+        inputTextElement.value ='';        
     }
+    runTyping(output);
 }
 
 function isInputSolution(word){        
@@ -40,3 +42,21 @@ const solutionWords = [
     "nix",
     "null"
 ];   
+
+
+
+function runTyping(value){
+    if(typed){
+        typed.destroy();
+    }    
+    typed = new Typed('#typed', {        
+        strings: [value],
+        typeSpeed: 60,
+            // time before typing starts
+            startDelay: 1000,
+            // backspacing speed
+            backSpeed: 20,
+            // time before backspacing
+            backDelay: 500  
+    });
+}
