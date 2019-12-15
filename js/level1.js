@@ -1,8 +1,10 @@
 const outputTextElement = document.getElementById('typingText');
 const inputTextElement = document.getElementById('inputText');
+const inputElement = document.getElementById('input');
+ 
 
 var typed;
-
+var solved;
 
 
 
@@ -13,15 +15,22 @@ function textinput(){
         runTypingArr(output);
     } else { 
         if (inputTextElement.value === ""){
-            output = ')?!-#~*TILT*+$()?=('            
+            output = ["ERRRRRRR...", "Wie... kann das sein?", "Du hast mich besiegt!!!"]
+            solved=true;     
+            while(inputElement.firstChild){
+                inputElement.removeChild(inputElement.firstChild);
+            }
+            runTypingArr(output);    
+                
         }        
         else if (outputTextElement.innerText === inputTextElement.value){
             output = outputTextElement.innerText +inputTextElement.value    
+            runTyping(output);
         } else {
             output = inputTextElement.value +' '+inputTextElement.value    
+            runTyping(output);
         }
-        inputTextElement.value ='';        
-        runTyping(output);
+        inputTextElement.value ='say something';                
     }
     
 }
@@ -71,6 +80,7 @@ function runTyping(value){
             // time before backspacing
             backDelay: 500  
     });
+
 }
 
 function runTypingArr(value){
