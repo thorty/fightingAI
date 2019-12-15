@@ -22,7 +22,10 @@ function textinput(){
             }
             runTypingArr(output);    
                 
-        }        
+        } else if (isSolutionWords(inputTextElement.value))     {
+            output = ["Gute Idee aber nicht gut genug.", "Manchmal ist weniger eben mehr.",inputTextElement.value +" "+inputTextElement.value]
+            runTypingArr(output);
+        }  
         else if (outputTextElement.innerText === inputTextElement.value){
             output = outputTextElement.innerText +inputTextElement.value    
             runTyping(output);
@@ -30,7 +33,7 @@ function textinput(){
             output = inputTextElement.value +' '+inputTextElement.value    
             runTyping(output);
         }
-        inputTextElement.value ='say something';                
+        inputTextElement.value ='sag was';                
     }
     
 }
@@ -45,6 +48,15 @@ function isHintWords(word){
     
 }
 
+function isSolutionWords(word){        
+    var a = solutionWords.indexOf(word);     
+    if (a !== -1){
+        return true
+    } else {
+        return false;
+    }
+
+}
 
 const hintWords = [
     "hilfe",
