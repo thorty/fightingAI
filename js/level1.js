@@ -12,27 +12,24 @@ function textinput(){
     let output="";
     if (isHintWords(inputTextElement.value)){
         output = ["Du bringst mich nie zum schweigen!", "Ich bin intelligenter als du!", "Ha Ha Ha..."]
-        runTypingArr(output);
+        runTyping(output);
     } else { 
         if (inputTextElement.value === ""){
             output = ["ERRRRRRR...", "Wie... kann das sein?", "Du hast mich besiegt!!!"]
             solved=true;     
             while(inputElement.firstChild){
                 inputElement.removeChild(inputElement.firstChild);
-            }
-            runTypingArr(output);    
+            }   
                 
         } else if (isSolutionWords(inputTextElement.value))     {
             output = ["Gute Idee aber nicht gut genug.", "Manchmal ist weniger eben mehr.",inputTextElement.value +" "+inputTextElement.value]
-            runTypingArr(output);
         }  
         else if (outputTextElement.innerText === inputTextElement.value){
             output = outputTextElement.innerText +inputTextElement.value    
-            runTyping(output);
         } else {
             output = inputTextElement.value +' '+inputTextElement.value    
-            runTyping(output);
         }
+        runTyping(output);
         inputTextElement.value ='sag was';                
     }
     
@@ -82,31 +79,30 @@ function runTyping(value){
     if(typed){
         typed.destroy();
     }    
-    typed = new Typed('#typed', {        
-        strings: [value],
-        typeSpeed: 60,
-            // time before typing starts
-            startDelay: 1000,
-            // backspacing speed
-            backSpeed: 20,
-            // time before backspacing
-            backDelay: 500  
-    });
+    if (!Array.isArray(value)){
+        typed = new Typed('#typed', { 
+            strings: [value],
+            typeSpeed: 60,
+                // time before typing starts
+                startDelay: 1000,
+                // backspacing speed
+                backSpeed: 20,
+                // time before backspacing
+                backDelay: 500          
+            });
+    } else {
+        typed = new Typed('#typed', {        
+            strings: value,
+            typeSpeed: 60,
+                // time before typing starts
+                startDelay: 1000,
+                // backspacing speed
+                backSpeed: 20,
+                // time before backspacing
+                backDelay: 500  
+        });    
+    }
+    
 
-}
 
-function runTypingArr(value){
-    if(typed){
-        typed.destroy();
-    }    
-    typed = new Typed('#typed', {        
-        strings: value,
-        typeSpeed: 60,
-            // time before typing starts
-            startDelay: 1000,
-            // backspacing speed
-            backSpeed: 20,
-            // time before backspacing
-            backDelay: 500  
-    });
 }
