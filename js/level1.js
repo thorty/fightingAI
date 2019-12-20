@@ -6,6 +6,15 @@ const inputElement = document.getElementById('input');
 var typed;
 var solved;
 
+//Todo
+//Datamodel in JSON
+//COunter for inputs 
+//Random Hints and Random motivation 
+
+function startGame(){
+    runTyping("Immer einmal mehr wie du...");
+    inputTextElement.value ='sag was'; 
+}
 
 
 function textinput(){
@@ -103,6 +112,45 @@ function runTyping(value){
         });    
     }
     
+const data = {
+    en:{
+        outStart: "always one more much as you....",
+        outStartinput: "say some",
+        outHelp: ["Good idea."," But.","Not good enought.", "Sometimes less is more!"],
+        outWin: ["ERRRRRRR...", "How...?","Could that really be?", "You beat me!!!"],
+        outMotivation: ["You never silence me!", "I am smarter than you!", "Ha Ha Ha..."],        
+    },
+    de: {
+        outStart: "Immer einmal mehr wie du...",
+        outStartinput: "Sag was",
+        outHelp: ["Gute Idee!","Aber..", "Nicht gut genug!", "Manchmal ist weniger eben mehr."],
+        outWin: ["ERRRRRRR...", "Wie...?", "Kann das sein?", "Du hast mich besiegt!!!"],
+        outMotivation: ["Du bringst mich nie zum schweigen!", "Ich bin intelligenter als du!", "Ha Ha Ha..."],        
+    },
+    in: {
+        inHinttrigger: [
+            "hilfe",
+            "help",
+            "/h",
+            "?",
+            "man",
+            "ich brauche hilfe",
+            "hilf mir",            
+            "tipp"
+        ],
+        inNearSolution: [
+            "weniger",
+            "less",
+            "wenige",
+            "keine",
+            "nix",
+            "null",
+            "nichts",
+            "still",
+            "ruhe"            
+        ],
+    }
 
+}
 
 }
