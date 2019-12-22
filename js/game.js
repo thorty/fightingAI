@@ -3,12 +3,15 @@ var inputText;
 
 var typed;
 var dataLang;
+var speechlang;
 var counter = 0;
 
 function startGame(lang) {
     if (lang === "en") {
+        speechlang = "en-US";
         dataLang = data.en;
     } else {
+        speechlang = "de-DE";
         dataLang = data.de;
     }
     createLevel1();
@@ -65,14 +68,14 @@ function createLevel1() {
     containerElement.appendChild(inputDiv);
 }
 
-function configureLevel1(){
+function configureLevel1() {
     runTyping(dataLang.outStart);
-    inputText.value = dataLang.outStartinput;    
-    inputText.addEventListener("keyup", function(event) {
-      if (event.keyCode === 13) {
-       event.preventDefault();
-       document.getElementById("inputBtn").click();
-      }
+    inputText.value = dataLang.outStartinput;
+    inputText.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("inputBtn").click();
+        }
     });
 }
 
@@ -126,7 +129,8 @@ function runTyping(value) {
             // backspacing speed
             backSpeed: 20,
             // time before backspacing
-            backDelay: 500
+            backDelay: 500,
+            onComplete: function(self) { speech(value) },
         });
     } else {
         typed = new Typed('#typed', {
@@ -137,10 +141,12 @@ function runTyping(value) {
             // backspacing speed
             backSpeed: 20,
             // time before backspacing
-            backDelay: 500
+            backDelay: 500,
+            onComplete: function(self) { speech(value) },
         });
     }
-
+    
+    
 }
 const data = {
     en: {
@@ -149,14 +155,14 @@ const data = {
         outHelp: ["Good idea.", " But.", "Not good enought.", "Sometimes less is more!"],
         outWin: ["ERRRRRRR...", "How...?", "Could that really be?", "You beat me!!!"],
         outMotivation: [
-    
-        ["You never silence me!", "I am smarter than you!", "Ha Ha Ha..."],
-        ["Thinking is the key.", "try hard human."],
-        ["Come on!", "No Idea?"],
-        ["What could be answer to the puzzle?"],
-        ["Now... Show me what you can!", "Ha ha ha"],
-    
-    ]
+
+            ["You never silence me!", "I am smarter than you!", "Ha Ha Ha..."],
+            ["Thinking is the key.", "try hard human."],
+            ["Come on!", "No Idea?"],
+            ["What could be answer to the puzzle?"],
+            ["Now... Show me what you can!", "Ha ha ha"],
+
+        ]
     },
     de: {
         outStart: "Immer einmal mehr wie du...",
@@ -202,6 +208,17 @@ const data = {
 
 }
 
+function speech(value) {
+    if ('speechSynthesis' in window) {
+        var speech = new SpeechSynthesisUtterance(value);
+        speech.lang = speechlang;
+        speech.pitch = 0.4;
+        speech.rate = 0.7;
+        window.speechSynthesis.speak(speech);
+        
+    }
+}
+
 function getRandomArray(items) {
     var item = items[Math.floor(Math.random() * items.length)];
     return item;
@@ -234,9 +251,9 @@ function level1Textinput() {
         output = inputTextElement.value + ' ' + inputTextElement.value
     }
     runTyping(output);
-    inputTextElement.value = dataLang.outStartinput;
+    inputTextElement.value = dataLang.outStartinput;    
 }
-    
+
 
 
 function level1IsHintWords(word) {
