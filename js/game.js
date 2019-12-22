@@ -3,20 +3,22 @@ var inputText;
 
 var typed;
 var dataLang;
+var counter = 0;
 
-function startGame(lang) {    
-    if (lang === "en"){
+function startGame(lang) {
+    if (lang === "en") {
         dataLang = data.en;
     } else {
         dataLang = data.de;
     }
     createLevel1();
-    runTyping(dataLang.outStart);
-    inputText.value = dataLang.outStartinput;
+    configureLevel1();
+
+
 }
 
 
-function createLevel1() {    
+function createLevel1() {
     /* Preview:
     <div id="input" class="inputContainer">
         <input type="text" name="inputText" class="inputText" value="" id="inputText"/>
@@ -39,7 +41,7 @@ function createLevel1() {
     span.setAttribute("id", "typed");
     var outputElement = span;
     h2.appendChild(span);
-    outputDiv.appendChild(h2); 
+    outputDiv.appendChild(h2);
     //inputDiv
     var inputDiv = document.createElement("div");
     inputDiv.setAttribute("class", "inputContainer");
@@ -57,13 +59,24 @@ function createLevel1() {
     inpButton.setAttribute("id", "inputBtn");
     inpButton.innerText = "send";
     inputDiv.appendChild(inputText);
-    inputDiv.appendChild(inpButton);   
+    inputDiv.appendChild(inpButton);
     //füge das neu erstellte Element und seinen Inhalt ins DOM ein  
     containerElement.appendChild(outputDiv);
     containerElement.appendChild(inputDiv);
 }
 
-function setStyleForLevel1(){
+function configureLevel1(){
+    runTyping(dataLang.outStart);
+    inputText.value = dataLang.outStartinput;    
+    inputText.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       document.getElementById("inputBtn").click();
+      }
+    });
+}
+
+function setStyleForLevel1() {
     var style = document.createElement('style');
     style.innerHTML = `
     
@@ -135,14 +148,28 @@ const data = {
         outStartinput: "say some",
         outHelp: ["Good idea.", " But.", "Not good enought.", "Sometimes less is more!"],
         outWin: ["ERRRRRRR...", "How...?", "Could that really be?", "You beat me!!!"],
-        outMotivation: ["You never silence me!", "I am smarter than you!", "Ha Ha Ha..."],
+        outMotivation: [
+    
+        ["You never silence me!", "I am smarter than you!", "Ha Ha Ha..."],
+        ["Thinking is the key.", "try hard human."],
+        ["Come on!", "No Idea?"],
+        ["What could be answer to the puzzle?"],
+        ["Now... Show me what you can!", "Ha ha ha"],
+    
+    ]
     },
     de: {
         outStart: "Immer einmal mehr wie du...",
         outStartinput: "Sag was",
         outHelp: ["Gute Idee!", "Aber..", "Nicht gut genug!", "Manchmal ist weniger eben mehr."],
         outWin: ["ERRRRRRR...", "Wie...?", "Kann das sein?", "Du hast mich besiegt!!!"],
-        outMotivation: ["Du bringst mich nie zum schweigen!", "Ich bin intelligenter als du!", "Ha Ha Ha..."],
+        outMotivation: [
+            ["Du bringst mich nie zum schweigen!", "Ich bin intelligenter als du!", "Ha Ha Ha..."],
+            ["Schon mal nachgedacht?", "Jetzt gib dir doch mal mühe Mensch."],
+            ["Komms schon!", "Keine Idee mehr?"],
+            ["Was ist wohl des Rätsels lösung?"],
+            ["Ist das alles was du kannst?", "Ha ha ha"],
+        ]
     },
     in: {
         inHinttrigger: [
@@ -175,50 +202,56 @@ const data = {
 
 }
 
+function getRandomArray(items) {
+    var item = items[Math.floor(Math.random() * items.length)];
+    return item;
+}
 
-function level1Textinput(){
+function level1Textinput() {
+    counter++;
     let outputTextElement = document.getElementById('outputText');
     let inputTextElement = document.getElementById('inputText');
-    let inputElement = document.getElementById('input');    
-    let output="";
-    if (level1IsHintWords(inputTextElement.value)){        
-        runTyping(dataLang.outMotivation);
-    } else { 
-        if (inputTextElement.value === ""){
-            output = dataLang.outWin;
-            solved=true;     
-            while(inputElement.firstChild){
-                inputElement.removeChild(inputElement.firstChild);
-            }   
-                
-        } else if (level1IsSolutionWords(inputTextElement.value))     {
-            output = dataLang.outHelp;
-            output.push(inputTextElement.value +" " +inputTextElement.value);                        
-        }  
-        else if (outputTextElement.innerText === inputTextElement.value){
-            output = outputTextElement.innerText +inputTextElement.value    
-        } else {
-            output = inputTextElement.value +' '+inputTextElement.value    
+    let inputElement = document.getElementById('input');
+    let output = "";
+    if (level1IsHintWords(inputTextElement.value)) {
+        runTyping(getRandomArray(dataLang.outMotivation));
+    } else if (inputTextElement.value === "") {
+        output = dataLang.outWin;
+        solved = true;
+        while (inputElement.firstChild) {
+            inputElement.removeChild(inputElement.firstChild);
         }
-        runTyping(output);
-        inputTextElement.value = dataLang.outStartinput;                
+
+    } else if (level1IsSolutionWords(inputTextElement.value)) {
+        output = dataLang.outHelp;
+        output.push(inputTextElement.value + " " + inputTextElement.value);
+    } else if (counter % 5 === 0) {
+        output = getRandomArray(dataLang.outMotivation);
+        output.push(inputTextElement.value + ' ' + inputTextElement.value)
+    } else if (counter % 11 === 0) {
+        output = dataLang.outHelp;
+    } else {
+        output = inputTextElement.value + ' ' + inputTextElement.value
     }
+    runTyping(output);
+    inputTextElement.value = dataLang.outStartinput;
+}
     
+
+
+function level1IsHintWords(word) {
+    var a = data.in.inHinttrigger.indexOf(word);
+    if (a !== -1) {
+        return true
+    } else {
+        return false;
+    }
+
 }
 
-function level1IsHintWords(word){        
-        var a = data.in.inHinttrigger.indexOf(word);     
-        if (a !== -1){
-            return true
-        } else {
-            return false;
-        }
-    
-}
-
-function level1IsSolutionWords(word){        
-    var a = data.in.inNearSolution.indexOf(word);     
-    if (a !== -1){
+function level1IsSolutionWords(word) {
+    var a = data.in.inNearSolution.indexOf(word);
+    if (a !== -1) {
         return true
     } else {
         return false;
